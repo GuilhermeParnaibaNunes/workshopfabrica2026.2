@@ -25,43 +25,58 @@ class BasicCalculator:
     def exponential(self):
         return self.n1**self.n2
 
+'''
+Menu class:
+    Simple Selection Menu
+'''
+class Menu:
+    def display(self):
+        print("\n*** Bem-vindo(a) a BasicCalculator!***\n"
+                  "\t1 - Soma\n"
+                  "\t2 - Subtração\n"
+                  "\t3 - Multiplicação\n"
+                  "\t4 - Divisão\n"
+                  "\t5 - Elevar\n"
+                  "\t0 - Sair\n"
+            )
+
+    @staticmethod
+    def selection(key, calculator):
+        match key:
+            case 1:
+                return calculator.addition()
+            case 2:
+                return calculator.subtraction()
+            case 3:
+                return calculator.multiplication()
+            case 4:
+                return calculator.division()
+            case 5:
+                return calculator.exponential()           
+
 result: float = 0
 BC = BasicCalculator(0, 0) 
-
-
+menu = Menu()        
 
 while True:
-    print("\n*** Bem-vindo(a) a BasicCalculator!***\n"
-            "\t1 - Soma\n"
-            "\t2 - Subtração\n"
-            "\t3 - Multiplicação\n"
-            "\t4 - Divisão\n"
-            "\t5 - Elevar\n"
-            "\t0 - Sair\n"
-        )
+    menu.display()
     menuKey = int(input("Selecione uma operação: "))
+
     if not menuKey:
         break
+    elif menuKey > 5 or menuKey < 0: 
+        print("Valor de seleção inválido")
+        continue
 
-    number1 = int(input("1° Valor: "))
-    number2 = int(input("2° Valor: "))
-
+    number1 = int(input("Informe o 1° Valor: "))
+    number2 = int(input("Informe o 2° Valor: "))
     BC.set(number1, number2)
-    match menuKey:
-        case 1:
-            result = BC.addition()
-        case 2:
-            result = BC.subtraction()
-        case 3:
-            result = BC.multiplication()
-        case 4:
-            result = BC.division()
-        case 5:
-            result = BC.exponential()           
-        case _:
-           print("Valor de seleção inválido")
-           break
-          
+
+    result = menu.selection(menuKey, BC)
+
+    if result is None:
+        break
+    
     print(f"\t*** O resultado da operação é: {result}***\n")
 
 print("Desligando...")
