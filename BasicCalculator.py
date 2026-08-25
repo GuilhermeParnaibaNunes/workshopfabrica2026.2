@@ -26,6 +26,30 @@ class BasicCalculator:
         return self.n1**self.n2
 
 '''
+Record class:
+    Keep track of operations history
+'''
+class Record:
+    def __init__(self):
+        self.history = []
+
+    def add_entry(self, n1, symbol, n2, result):
+        self.history.append({
+            "n1": n1,
+            "operation": symbol,
+            "n2": n2,
+            "result": result
+        })
+
+        print(f"\n\t*** {n1} {symbol} {n2} = {result} ***\n")
+
+    def display_summary(self):
+        print("\n\t--- RESUMO DE TODAS AS OPERAÇÕES ---")
+        for i, item in enumerate(self.history):
+            print(f"\t\t{i+1}° - {item['n1']} {item['operation']} {item['n2']} = {item['result']}")
+        print("\t------------------------------------\n")
+
+'''
 Menu class:
     Simple Selection Menu
 '''
@@ -44,19 +68,19 @@ class Menu:
     def selection(key, calculator):
         match key:
             case 1:
-                return calculator.addition()
+                return calculator.addition(), "+"
             case 2:
-                return calculator.subtraction()
+                return calculator.subtraction(), "-"
             case 3:
-                return calculator.multiplication()
+                return calculator.multiplication(), "*"
             case 4:
-                return calculator.division()
+                return calculator.division(), "/"
             case 5:
-                return calculator.exponential()           
+                return calculator.exponential(), "^"          
 
-result: float = 0
 BC = BasicCalculator(0, 0) 
 menu = Menu()        
+record = Record()
 
 while True:
     menu.display()
@@ -72,11 +96,12 @@ while True:
     number2 = int(input("Informe o 2° Valor: "))
     BC.set(number1, number2)
 
-    result = menu.selection(menuKey, BC)
+    result, symbol = menu.selection(menuKey, BC)
 
     if result is None:
         break
-    
-    print(f"\t*** O resultado da operação é: {result}***\n")
 
-print("Desligando...")
+    record.add_entry(number1, symbol, number2, result)
+
+record.display_summary()
+print("Até mais...")
