@@ -84,22 +84,34 @@ record = Record()
 
 while True:
     menu.display()
-    menuKey = int(input("Selecione uma operação: "))
+
+    try:
+        menuKey = int(input("Selecione uma operação: "))
+    except ValueError:
+        print("\n[ERRO] Por favor, digite apenas o número da opção desejada!")
+        continue
 
     if not menuKey:
         break
     elif menuKey > 5 or menuKey < 0: 
-        print("Valor de seleção inválido")
+        print("\n[ERRO] Valor de seleção inválido")
         continue
 
-    number1 = int(input("Informe o 1° Valor: "))
-    number2 = int(input("Informe o 2° Valor: "))
+    try:
+        number1 = int(input("Informe o 1° Valor: "))
+        number2 = int(input("Informe o 2° Valor: "))
+    except ValueError:
+        print("\n[ERRO] Você inseriu um caractere inválido. "
+              "Digite apenas números inteiros.")
+        continue
+
     BC.set(number1, number2)
 
-    result, symbol = menu.selection(menuKey, BC)
-
-    if result is None:
-        break
+    try: 
+        result, symbol = menu.selection(menuKey, BC)
+    except ZeroDivisionError:
+        print("\n[ERRO] Impossível dividir por zero! Tente novamente.")
+        continue
 
     record.add_entry(number1, symbol, number2, result)
 
